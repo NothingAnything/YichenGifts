@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+    <title>Yichen's Gift</title>
+</head>
+
+<body>
+<canvas id="canvas"></canvas>
+    <!-- Audio Background Music -->
+    <audio  autoplay="autoplay" loop="loop" preload="auto">
+        <source src="renxi.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/javascript">
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        var texts = 'I LOVE U'.split('');
+
+        var fontSize = 16;
+        var columns = canvas.width / fontSize;
+        // 用于计算输出文字时坐标，所以长度即为列数
+        var drops = [];
+        //初始值
+        for (var x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function draw() {
+            //让背景逐渐由透明到不透明
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            //文字颜色
+            ctx.fillStyle = '#b300c4';
+            ctx.font = fontSize + 'px arial';
+            //逐行输出文字
+            for (var i = 0; i < drops.length; i++) {
+                var text = texts[Math.floor(Math.random() * texts.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+    </script>
+</body>
+
+</html>
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+    <TITLE>love</TITLE>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <META NAME="Generator" CONTENT="EditPlus">
+    <META NAME="Author" CONTENT="">
+    <META NAME="Keywords" CONTENT="">
+    <META NAME="Description" CONTENT="">
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background: rgb(0, 0, 0); /* 背景色为黑色 */
+        }
+        canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .heart-container {
+            position: fixed;
+            display: inline-block;
+            top: 50%;
+            left: 50%;
+        }
+
+        .heart {
+            font-family:'Brush Script MT', cursive;
+            position: fixed;
+            top: 72%; /* 定位在页面中间稍偏下 */
+            left: 47.5%; /* 水平居中 */
+            margin-top: -75px;
+            margin-left: -150px;
+            color: #c20cd3;
+            font-size: 65px;
+            animation: fadeIn 2s;
+            font-weight: bold;
+            white-space: nowrap; /* 防止文本换行 */
+            display: none; /* Hide initially */
+
+        }
+        .name {
+            font-family:'Brush Script MT', cursive;
+            position: absolute; /* 使用绝对定位以便更精确地控制位置 */
+            top: 50%; /* 定位在页面中间 */
+            left: 50%; /* 水平居中 */
+            transform: translate(-50%, -50%); /* 使用transform进行精确居中 */
+            color: #c20cd3;
+            font-size: 70px;
+            font-weight: bold;
+            white-space: nowrap; /* 防止文本换行 */
+            animation: flash 2s infinite;
+        }
+        /* Text Style for the Side Sentences */
+        .side-text {
+            font-family:'Brush Script MT', cursive;
+            font-size: 50px;
+            color: #f763ef; /* Red-purple color */
+            font-weight: bold;
+            position: fixed;
+            display: none; /* Hide initially */
+            animation: flash 2s infinite;
+        }
+
+        /* Vertical text effect */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+
+        /* Positioning for the Left and Right Text */
+        .left-text-1 { left: 5%; top: 10%; position: fixed;}
+        .left-text-3 { left: 15%; top: 30%; position: fixed;}
+
+        .right-text-1 { right: 5%; top: 10%; position: fixed;}
+        .right-text-3 { right: 15%; top: 30%; position: fixed;}
+
+        @keyframes flash {
+            0%, 50%, 100% {
+                opacity: 1;
+            }
+            25%, 75% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Heart Shape Text -->
+     <div class="heart-container">
+        <!-- Left Side Vertical Texts -->
+        <div class="side-text vertical-text left-text-1" id="left1">你走进了我的生命，我正在为你准备好一生一世</div>
+        <div class="side-text vertical-text left-text-3" id="left3">愿得一人心，白首不相离</div>
+
+        <!-- Heart Shape Text -->
+        <div class="heart" id="heart-text">永不凋零的爱</div>
+        <div class="name" id="name">亦辰</div>
+
+        <!-- Right Side Vertical Texts -->
+        <div class="side-text vertical-text right-text-1" id="right1">我闯入了你的生活，你成为了我无法割舍的唯一</div>
+        <div class="side-text vertical-text right-text-3" id="right3">此生得遇卿，方知人间值</div>
+    </div>
+    <canvas id="pinkboard"></canvas> <!-- 主要用于粒子动画的画布 -->
+    <script>
+        /*
+         * 配置项
+         */
+        var settings = {
+            particles: {
+                length: 500, // 最大粒子数量
+                duration: 2, // 粒子持续时间（秒）
+                velocity: 100, // 粒子速度（像素/秒）
+                effect: -0.75, // 粒子效果系数，控制粒子的运动
+                size: 30, // 粒子的大小（像素）
+            },
+        };
+
+        /*
+         * RequestAnimationFrame 兼容性处理
+         */
+        (function () { 
+            var b = 0; 
+            var c = ["ms", "moz", "webkit", "o"]; 
+            for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) { 
+                window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"]; 
+                window.cancelAnimationFrame = window[c[a] + "CancelAnimationFrame"] || window[c[a] + "CancelRequestAnimationFrame"] 
+            } 
+            if (!window.requestAnimationFrame) { 
+                window.requestAnimationFrame = function (h, e) { 
+                    var d = new Date().getTime(); 
+                    var f = Math.max(0, 16 - (d - b)); 
+                    var g = window.setTimeout(function () { h(d + f) }, f); 
+                    b = d + f; 
+                    return g 
+                } 
+            } 
+            if (!window.cancelAnimationFrame) { 
+                window.cancelAnimationFrame = function (d) { clearTimeout(d) } 
+            } 
+        })();
+
+        /*
+         * 定义 Point 类，用于表示粒子的位置和方向
+         */
+        var Point = (function () {
+            function Point(x, y) {
+                this.x = (typeof x !== 'undefined') ? x : 0;
+                this.y = (typeof y !== 'undefined') ? y : 0;
+            }
+            Point.prototype.clone = function () {
+                return new Point(this.x, this.y);
+            };
+            Point.prototype.length = function (length) {
+                if (typeof length == 'undefined')
+                    return Math.sqrt(this.x * this.x + this.y * this.y);
+                this.normalize();
+                this.x *= length;
+                this.y *= length;
+                return this;
+            };
+            Point.prototype.normalize = function () {
+                var length = this.length();
+                this.x /= length;
+                this.y /= length;
+                return this;
+            };
+            return Point;
+        })();
+
+        /*
+         * 定义粒子类
+         */
+        var Particle = (function () {
+            function Particle() {
+                this.position = new Point();
+                this.velocity = new Point();
+                this.acceleration = new Point();
+                this.age = 0;
+            }
+            Particle.prototype.initialize = function (x, y, dx, dy) {
+                this.position.x = x;
+                this.position.y = y;
+                this.velocity.x = dx;
+                this.velocity.y = dy;
+                this.acceleration.x = dx * settings.particles.effect;
+                this.acceleration.y = dy * settings.particles.effect;
+                this.age = 0;
+            };
+            Particle.prototype.update = function (deltaTime) {
+                this.position.x += this.velocity.x * deltaTime;
+                this.position.y += this.velocity.y * deltaTime;
+                this.velocity.x += this.acceleration.x * deltaTime;
+                this.velocity.y += this.acceleration.y * deltaTime;
+                this.age += deltaTime;
+            };
+            Particle.prototype.draw = function (context, image) {
+                function ease(t) {
+                    return (--t) * t * t + 1;
+                }
+                var size = image.width * ease(this.age / settings.particles.duration);
+                context.globalAlpha = 1 - this.age / settings.particles.duration;
+                context.drawImage(image, this.position.x - size / 2, this.position.y - size / 2, size, size);
+            };
+            return Particle;
+        })();
+
+        /*
+         * 粒子池，用于管理粒子的创建与重用
+         */
+        var ParticlePool = (function () {
+            var particles,
+                firstActive = 0,
+                firstFree = 0,
+                duration = settings.particles.duration;
+
+            function ParticlePool(length) {
+                particles = new Array(length);
+                for (var i = 0; i < particles.length; i++)
+                    particles[i] = new Particle();
+            }
+            ParticlePool.prototype.add = function (x, y, dx, dy) {
+                particles[firstFree].initialize(x, y, dx, dy);
+                firstFree++;
+                if (firstFree == particles.length) firstFree = 0;
+                if (firstActive == firstFree) firstActive++;
+                if (firstActive == particles.length) firstActive = 0;
+            };
+            ParticlePool.prototype.update = function (deltaTime) {
+                var i;
+                if (firstActive < firstFree) {
+                    for (i = firstActive; i < firstFree; i++)
+                        particles[i].update(deltaTime);
+                }
+                if (firstFree < firstActive) {
+                    for (i = firstActive; i < particles.length; i++)
+                        particles[i].update(deltaTime);
+                    for (i = 0; i < firstFree; i++)
+                        particles[i].update(deltaTime);
+                }
+                while (particles[firstActive].age >= duration && firstActive != firstFree) {
+                    firstActive++;
+                    if (firstActive == particles.length) firstActive = 0;
+                }
+            };
+            ParticlePool.prototype.draw = function (context, image) {
+                if (firstActive < firstFree) {
+                    for (i = firstActive; i < firstFree; i++)
+                        particles[i].draw(context, image);
+                }
+                if (firstFree < firstActive) {
+                    for (i = firstActive; i < particles.length; i++)
+                        particles[i].draw(context, image);
+                    for (i = 0; i < firstFree; i++)
+                        particles[i].draw(context, image);
+                }
+            };
+            return ParticlePool;
+        })();
+
+        /*
+         * 渲染粒子动画
+         */
+        (function (canvas) {
+            var context = canvas.getContext('2d'),
+                particles = new ParticlePool(settings.particles.length),
+                particleRate = settings.particles.length / settings.particles.duration, 
+                time;
+
+            function pointOnHeart(t) {
+                return new Point(
+                    160 * Math.pow(Math.sin(t), 3),
+                    130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+                );
+            }
+
+            var image = (function () {
+                var canvas = document.createElement('canvas'),
+                    context = canvas.getContext('2d');
+                canvas.width = settings.particles.size;
+                canvas.height = settings.particles.size;
+                function to(t) {
+                    var point = pointOnHeart(t);
+                    point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
+                    point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+                    return point;
+                }
+                context.beginPath();
+                var t = -Math.PI;
+                var point = to(t);
+                context.moveTo(point.x, point.y);
+                while (t < Math.PI) {
+                    t += 0.01; 
+                    point = to(t);
+                    context.lineTo(point.x, point.y);
+                }
+                context.closePath();
+                context.fillStyle = '#c20cd3';
+                context.fill();
+                var image = new Image();
+                image.src = canvas.toDataURL();
+                return image;
+            })();
+
+            function render() {
+                requestAnimationFrame(render);
+                var newTime = new Date().getTime() / 1000,
+                    deltaTime = newTime - (time || newTime);
+                time = newTime;
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                var amount = particleRate * deltaTime;
+                for (var i = 0; i < amount; i++) {
+                    var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+                    var dir = pos.clone().length(settings.particles.velocity);
+                    particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+                }
+                particles.update(deltaTime);
+                particles.draw(context, image);
+            }
+
+            function onResize() {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+            }
+            window.onresize = onResize;
+            setTimeout(function () {
+                onResize();
+                render();
+            }, 10);
+        })(document.getElementById('pinkboard'));
+
+        // Function to display each character one by one
+        async function showTextOneByOne(element) {
+            const text = element.innerText;
+            element.innerText = ""; // Clear text initially
+            element.style.display = "block"; // Make it visible
+            
+            for (let i = 0; i < text.length; i++) {
+                element.innerText += text[i];
+                await new Promise(resolve => setTimeout(resolve, 180)); // Show one character every 200ms
+            }
+        }
+
+        async function animateDisplay() {
+            // Step 1: Show the first lines on both sides simultaneously
+            await Promise.all([
+                showTextOneByOne(document.getElementById("left1")),
+                showTextOneByOne(document.getElementById("right1"))
+            ]);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Step 2: Show the second lines on both sides simultaneously
+            //await Promise.all([
+            //    showTextOneByOne(document.getElementById("left2")),
+            //    showTextOneByOne(document.getElementById("right2"))
+            //]);
+            //await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Step 3: Show the third lines on both sides simultaneously
+            await Promise.all([
+                showTextOneByOne(document.getElementById("left3")),
+                showTextOneByOne(document.getElementById("right3"))
+            ]);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            while (true) {
+                await showTextOneByOne(document.getElementById("heart-text"));
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Show one character every 1000ms
+            }
+            // Step 4: Display the heart text after all side texts
+           // document.getElementById("heart-text").style.display = "block";
+        }
+        // Start animation
+        window.onload = animateDisplay;
+
+    </script>
+</BODY>
+</HTML>
