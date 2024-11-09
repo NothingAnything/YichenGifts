@@ -169,7 +169,7 @@
         .right-text-3 { right: 15%; top: 30%; position: fixed;}
 
         .petal {
-            position: absolute;
+            position: fixed; /* 改为 fixed 定位 */
             pointer-events: none;
             width: 30px;
             height: 30px;
@@ -266,10 +266,14 @@
             const initialRotation = Math.random() * 360;
             petal.style.transform = `rotate(${initialRotation}deg)`;
             
+            // 确保添加到正确的容器
             document.body.appendChild(petal);
             
-            petal.addEventListener('animationend', () => {
-                petal.remove();
+            // 动画结束后移除元素
+            petal.addEventListener('animationend', function() {
+                if (petal && petal.parentNode) {
+                    petal.parentNode.removeChild(petal);
+                }
             });
         }
         /*
@@ -511,53 +515,77 @@
         }
 
         async function animateDisplay() {
-            // Step 1: Show the first lines on both sides simultaneously
-            await Promise.all([
-                showTextOneByOne(document.getElementById("left1")),
-                showTextOneByOne(document.getElementById("right1"))
-            ]);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            try {
+                // Step 1: Show the first lines on both sides simultaneously
+                await Promise.all([
+                    showTextOneByOne(document.getElementById("left1")),
+                    showTextOneByOne(document.getElementById("right1"))
+                ]);
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Step 2: Show the second lines on both sides simultaneously
-            //await Promise.all([
-            //    showTextOneByOne(document.getElementById("left2")),
-            //    showTextOneByOne(document.getElementById("right2"))
-            //]);
-            //await new Promise(resolve => setTimeout(resolve, 1000));
+                // Step 2: Show the second lines on both sides simultaneously
+                //await Promise.all([
+                //    showTextOneByOne(document.getElementById("left2")),
+                //    showTextOneByOne(document.getElementById("right2"))
+                //]);
+                //await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // Step 3: Show the third lines on both sides simultaneously
-            await Promise.all([
-                showTextOneByOne(document.getElementById("left3")),
-                showTextOneByOne(document.getElementById("right3"))
-            ]);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+                // Step 3: Show the third lines on both sides simultaneously
+                await Promise.all([
+                    showTextOneByOne(document.getElementById("left3")),
+                    showTextOneByOne(document.getElementById("right3"))
+                ]);
+                await new Promise(resolve => setTimeout(resolve, 1000));
 
-            // 创建初始花瓣
-            for(let i = 0; i < 10; i++) {
-                setTimeout(() => createPetal(), Math.random() * 3000);
-            }
-            
-            // 随机间隔创建新花瓣
-            function scheduleNextPetal() {
-                const delay = Math.random() * 300 + 300; // 300-600ms随机间隔
-                setTimeout(() => {
-                    createPetal();
+                // 创建初始花瓣，随机延迟
+                for(let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        try {
+                            createPetal();
+                        } catch (e) {
+                            console.error('Error creating initial petal:', e);
+                        }
+                    }, Math.random() * 3000);
+                }
+                
+                // 随机间隔创建新花瓣
+                function scheduleNextPetal() {
+                    const delay = Math.random() * 300 + 300; // 300-600ms随机间隔
+                    setTimeout(() => {
+                        try {
+                            createPetal();
+                            scheduleNextPetal();
+                        } catch (e) {
+                            console.error('Error in scheduleNextPetal:', e);
+                            // 如果出错，尝试重新调度
+                            setTimeout(scheduleNextPetal, 1000);
+                        }
+                    }, delay);
+                }
+                
+                // 确保 DOM 完全加载后再开始
+                if (document.readyState === 'complete') {
                     scheduleNextPetal();
-                }, delay);
-            }
-            
-            scheduleNextPetal();
+                } else {
+                    window.addEventListener('load', scheduleNextPetal);
+                }
 
-            while (true) {
-                await showTextOneByOne(document.getElementById("heart-text"));
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Show one character every 1000ms
-            }
-            // Step 4: Display the heart text after all side texts
-           // document.getElementById("heart-text").style.display = "block";
+                while (true) {
+                    await showTextOneByOne(document.getElementById("heart-text"));
+                    await new Promise(resolve => setTimeout(resolve, 2000)); // Show one character every 1000ms
+                }
+                // Step 4: Display the heart text after all side texts
+               // document.getElementById("heart-text").style.display = "block";
+           } catch (e) {
+               console.error('Error in animateDisplay:', e);
+           }
         }
-        // Start animation
-        window.onload = animateDisplay;
-
+        // 确保 DOM 加载完成后再执行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', animateDisplay);
+        } else {
+            animateDisplay();
+        }
     </script>
 </BODY>
 </HTML>
