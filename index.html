@@ -56,15 +56,16 @@
             left: 50%;
         }
 
+        /* 修改字体大小响应式设置 */
         .heart {
-            font-family:'Brush Script MT', cursive;
+            font-family: 'Brush Script MT', cursive;
             position: fixed;
             top: 73%;
             left: 47.5%;
             margin-top: -75px;
             margin-left: -150px;
             color: #c20cd3;
-            font-size: 65px;
+            font-size: clamp(35px, 5vw, 65px); /* 根据视窗宽度自适应字体大小 */
             animation: fadeIn 2s;
             font-weight: bold;
             white-space: nowrap;
@@ -72,22 +73,23 @@
         }
 
         .name {
-            font-family:'Brush Script MT', cursive;
+            font-family: 'Brush Script MT', cursive;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #c20cd3;
-            font-size: 70px;
+            font-size: clamp(40px, 6vw, 70px); /* 根据视窗宽度自适应字体大小 */
             font-weight: bold;
             white-space: nowrap;
             display: none;
             animation: flash 2s infinite;
         }
 
+        /* 侧边文字基础样式 */
         .side-text {
-            font-family:'Brush Script MT', cursive;
-            font-size: 50px;
+            font-family: 'Brush Script MT', cursive;
+            font-size: clamp(25px, 4vw, 50px);
             color: #f763ef;
             font-weight: bold;
             position: fixed;
@@ -100,10 +102,67 @@
             text-orientation: upright;
         }
 
-        .left-text-1 { left: 5%; top: 10%; position: fixed;}
-        .left-text-3 { left: 15%; top: 30%; position: fixed;}
-        .right-text-1 { right: 5%; top: 10%; position: fixed;}
-        .right-text-3 { right: 15%; top: 30%; position: fixed;}
+        /* PC端默认位置 - 更靠近中间 */
+        .left-text-1 { 
+            left: calc(15% + 1vw); 
+            top: 10%; 
+        }
+        .left-text-3 { 
+            left: calc(22% + 1vw); 
+            top: 30%; 
+        }
+        .right-text-1 { 
+            right: calc(15% + 1vw); 
+            top: 10%; 
+        }
+        .right-text-3 { 
+            right: calc(22% + 1vw); 
+            top: 30%; 
+        }
+
+        /* 响应式调整 */
+        @media screen and (max-width: 1440px) {
+            .left-text-1 { left: calc(12% + 1vw); }
+            .left-text-3 { left: calc(18% + 1vw); }
+            .right-text-1 { right: calc(12% + 1vw); }
+            .right-text-3 { right: calc(18% + 1vw); }
+        }
+
+        @media screen and (max-width: 1024px) {
+            .left-text-1 { left: calc(8% + 1vw); }
+            .left-text-3 { left: calc(14% + 1vw); }
+            .right-text-1 { right: calc(8% + 1vw); }
+            .right-text-3 { right: calc(14% + 1vw); }
+        }
+
+        @media screen and (max-width: 768px) {
+            .side-text {
+                font-size: clamp(20px, 3.5vw, 35px);
+            }
+            .left-text-1 { left: calc(4% + 1vw); }
+            .left-text-3 { left: calc(8% + 1vw); }
+            .right-text-1 { right: calc(4% + 1vw); }
+            .right-text-3 { right: calc(8% + 1vw); }
+        }
+
+        /* 超小屏幕设备 */
+        @media screen and (max-width: 480px) {
+            .side-text {
+                font-size: clamp(16px, 3vw, 25px);
+            }
+            .left-text-1 { left: calc(2% + 1vw); }
+            .left-text-3 { left: calc(5% + 1vw); }
+            .right-text-1 { right: calc(2% + 1vw); }
+            .right-text-3 { right: calc(5% + 1vw); }
+        }
+
+        /* 确保文字在超宽屏幕上不会离中心太远 */
+        @media screen and (min-width: 1920px) {
+            .left-text-1 { left: calc(5% + 2vw); }
+            .left-text-3 { left: calc(12% + 3vw); }
+            .right-text-1 { right: calc(5% + 2vw); }
+            .right-text-3 { right: calc(12% + 3vw); }
+        }
 
         .petal {
             position: fixed;
@@ -156,6 +215,18 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        /* 添加媒体查询，针对移动设备调整布局 */
+        @media screen and (max-width: 768px) {
+            .side-text {
+                font-size: clamp(20px, 3.5vw, 35px); /* 移动端更小的字体 */
+            }
+
+            .left-text-1 { left: 1%; }
+            .left-text-3 { left: 5%; }
+            .right-text-1 { right: 1%; }
+            .right-text-3 { right: 5%; }
         }
     </style>
 </head>
@@ -393,7 +464,7 @@
                 duration: 2,
                 velocity: 100,
                 effect: -0.75,
-                size: 30,
+                size: Math.min(30, window.innerWidth / 30), // 根据屏幕宽度调整粒子大小
             },
         };
 
@@ -597,6 +668,13 @@
         window.addEventListener('error', function(e) {
             console.error('Resource loading error:', e.target.src || e.target.href);
         });
+
+        // 在 window.onresize 中添加粒子大小调整
+        function onResize() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+            settings.particles.size = Math.min(30, window.innerWidth / 30);
+        }
     </script>
 </body>
 </html>
