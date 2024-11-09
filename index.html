@@ -421,8 +421,12 @@
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
-            
-            const size = Math.random() * 20 + 30;
+
+            // 根据屏幕宽度调整花瓣大小
+            const isMobile = window.innerWidth <= 768;
+            const size = isMobile ? 
+                (Math.random() * 10 + 15) :  // 手机端 15-25px
+                (Math.random() * 20 + 30);   // 桌面端 30-50px
             petal.style.width = `${size}px`;
             petal.style.height = `${size}px`;
 
