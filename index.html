@@ -4,113 +4,45 @@
 
 <head>
     <title>Yichen's Gift</title>
-    <!-- 预加载音频文件 -->
-    <link rel="preload" href="River_flow_in_you.mp3" as="audio">
-    <!-- 预加载字体 -->
-    <link rel="preload" href="path/to/Brush-Script-MT.woff2" as="font" type="font/woff2" crossorigin>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" href="River_flow_in_you.mp3" as="audio" type="audio/mpeg">
+    <link rel="dns-prefetch" href="https://nothinganything.github.io/YichenGifts/">
+    <link rel="preconnect" href="https://nothinganything.github.io/YichenGifts/">
 
-<body>
-    <div id="loading" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #c20cd3; font-size: 24px; z-index: 9999;">
-        加载中...
-    </div>
-    <canvas id="canvas"></canvas>
-    <!-- Audio Background Music -->
-    <audio id="backgroundMusic" loop>
-        <!-- <source src="renxi.mp3" type="audio/mpeg">-->
-        <source src="River_flow_in_you.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <style type="text/css">
+    <style>
+        /* 加载动画样式 */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #c20cd3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 原有样式 */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
         }
-    </style>
-    <script type="text/javascript">
 
-        // 获取 audio 元素
-        var audio = document.getElementById('backgroundMusic');
-
-        // 检查浏览器是否支持 audio 元素
-        if (audio != undefined) {
-            // 尝试播放音乐
-            audio.play().catch(function(error) {
-                // 如果自动播放失败，等待用户交互
-                console.log("自动播放被阻止，等待用户交互");
-            });
-
-            // 监听用户的首次交互事件
-            document.addEventListener('click', function() {
-                // 用户交互后播放音乐
-                audio.play().catch(function(error) {
-                    console.log("播放音乐时出错: ", error);
-                });
-            }, { once: true }); // { once: true } 表示事件只触发一次
-        }
-        var canvas = document.getElementById('canvas');
-        var ctx = canvas.getContext('2d');
-
-
-        canvas.height = window.innerHeight;
-        canvas.width = window.innerWidth;
-
-        var texts = 'I LOVE U'.split('');
-
-        var fontSize = 22;
-        var columns = canvas.width / fontSize;
-        // 用于计算输出文字时坐标，所以长度即为列数
-        var drops = [];
-        //初始值
-        for (var x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-
-        function draw() {
-            //让背景逐渐由透明到不透明
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            //文字颜色
-            ctx.fillStyle = '#b300c4';
-            ctx.font = fontSize + 'px arial';
-            //逐行输出文字
-            for (var i = 0; i < drops.length; i++) {
-                var text = texts[Math.floor(Math.random() * texts.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
-                    drops[i] = 0;
-                }
-
-                drops[i]++;
-            }
-        }
-        setInterval(draw, 33);
-    </script>
-</body>
-
-</html>
-
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-    <TITLE>love</TITLE>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <META NAME="Generator" CONTENT="EditPlus">
-    <META NAME="Author" CONTENT="">
-    <META NAME="Keywords" CONTENT="">
-    <META NAME="Description" CONTENT="">
-    <meta charset="UTF-8">
-    <style>
-        html, body {
-            height: 100%;
-            padding: 0;
-            margin: 0;
-            background: rgb(0, 0, 0); /* 背景色为黑色 */
-        }
         canvas {
             position: absolute;
             width: 100%;
@@ -127,57 +59,54 @@
         .heart {
             font-family:'Brush Script MT', cursive;
             position: fixed;
-            top: 73%; /* 定位在页面中间稍偏下 */
-            left: 47.5%; /* 水平居中 */
+            top: 73%;
+            left: 47.5%;
             margin-top: -75px;
             margin-left: -150px;
             color: #c20cd3;
             font-size: 65px;
             animation: fadeIn 2s;
             font-weight: bold;
-            white-space: nowrap; /* 防止文本换行 */
-            display: none; /* Hide initially */
-
+            white-space: nowrap;
+            display: none;
         }
+
         .name {
             font-family:'Brush Script MT', cursive;
-            position: absolute; /* 使用绝对定位以便更精确地控制位置 */
-            top: 50%; /* 定位在页面中间 */
-            left: 50%; /* 水平居中 */
-            transform: translate(-50%, -50%); /* 使用transform进行精确居中 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: #c20cd3;
             font-size: 70px;
             font-weight: bold;
-            white-space: nowrap; /* 防止文本换行 */
-            display: none; /* Hide initially */
-            animation: flash 2s infinite;
-        }
-        /* Text Style for the Side Sentences */
-        .side-text {
-            font-family:'Brush Script MT', cursive;
-            font-size: 50px;
-            color: #f763ef; /* Red-purple color */
-            font-weight: bold;
-            position: fixed;
-            display: none; /* Hide initially */
+            white-space: nowrap;
+            display: none;
             animation: flash 2s infinite;
         }
 
-        /* Vertical text effect */
+        .side-text {
+            font-family:'Brush Script MT', cursive;
+            font-size: 50px;
+            color: #f763ef;
+            font-weight: bold;
+            position: fixed;
+            display: none;
+            animation: flash 2s infinite;
+        }
+
         .vertical-text {
             writing-mode: vertical-rl;
             text-orientation: upright;
         }
 
-        /* Positioning for the Left and Right Text */
         .left-text-1 { left: 5%; top: 10%; position: fixed;}
         .left-text-3 { left: 15%; top: 30%; position: fixed;}
-
         .right-text-1 { right: 5%; top: 10%; position: fixed;}
         .right-text-3 { right: 15%; top: 30%; position: fixed;}
 
         .petal {
-            position: fixed; /* 改为 fixed 定位 */
+            position: fixed;
             pointer-events: none;
             width: 30px;
             height: 30px;
@@ -220,12 +149,8 @@
         }
 
         @keyframes flash {
-            0%, 50%, 100% {
-                opacity: 1;
-            }
-            25%, 75% {
-                opacity: 0.5;
-            }
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
         }
 
         @keyframes fadeIn {
@@ -234,99 +159,254 @@
         }
     </style>
 </head>
+
 <body>
-    <!-- Heart Shape Text -->
-     <div class="heart-container">
-        <!-- Left Side Vertical Texts -->
+    <!-- 加载指示器 -->
+    <div class="loading-container" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+    
+    <!-- 音频背景音乐 -->
+    <audio id="backgroundMusic" preload="auto" loop>
+        <source src="River_flow_in_you.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- 心形文字容器 -->
+    <div class="heart-container">
+        <!-- 左侧垂直文字 -->
         <div class="side-text vertical-text left-text-1" id="left1">你走进了我的生命，我正在为你准备好一生一世</div>
         <div class="side-text vertical-text left-text-3" id="left3">愿得一人心，白首不相离</div>
 
-        <!-- Heart Shape Text -->
+        <!-- 心形文字 -->
         <div class="heart" id="heart-text">至死不渝的爱</div>
         <div class="name" id="name">亦辰</div>
 
-        <!-- Right Side Vertical Texts -->
+        <!-- 右侧垂直文字 -->
         <div class="side-text vertical-text right-text-1" id="right1">我闯入了你的生活，你成为了我无法割舍的唯一</div>
         <div class="side-text vertical-text right-text-3" id="right3">此生得遇卿，方知人间值</div>
     </div>
-    <canvas id="pinkboard"></canvas> <!-- 主要用于粒子动画的画布 -->
+
+    <canvas id="pinkboard"></canvas>
+
     <script>
+        // 初始化画布
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        var texts = 'I LOVE U'.split('');
+        var fontSize = 22;
+        var columns = canvas.width / fontSize;
+        var drops = [];
+
+        for (var x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function draw() {
+            // 降低背景的渐变速度，增加透明度
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.03)'; // 原来是 0.05
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#b300c4';
+            ctx.font = fontSize + 'px arial';
+
+            for (var i = 0; i < drops.length; i++) {
+                var text = texts[Math.floor(Math.random() * texts.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+
+                // 降低下落速度
+                if (Math.random() > 0.3) { // 添加随机性，使下落更自然
+                    drops[i]++;
+                }
+            }
+        }
+
+        // 性能优化：使用 requestAnimationFrame 并控制帧率
+        let lastDrawTime = 0;
+        const drawInterval = 50; // 每50ms绘制一次，原来是33ms
+
+        function animate(currentTime) {
+            if (currentTime - lastDrawTime > drawInterval) {
+                draw();
+                lastDrawTime = currentTime;
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // 资源预加载
+        const preloadResources = () => {
+            const audio = document.getElementById('backgroundMusic');
+            return new Promise((resolve) => {
+                audio.load();
+                if (audio.readyState >= 2) {
+                    resolve();
+                } else {
+                    audio.addEventListener('canplaythrough', resolve, { once: true });
+                }
+            });
+        };
+
+        // 优化音频播放
+        const initializeAudio = () => {
+            const audio = document.getElementById('backgroundMusic');
+            
+            const playAudio = () => {
+                audio.play().catch(error => {
+                    console.log("播放音乐时出错: ", error);
+                });
+            };
+
+            // 尝试自动播放
+            playAudio();
+
+            // 监听用户交互以播放音频
+            document.addEventListener('click', () => {
+                if (audio.paused) {
+                    playAudio();
+                }
+            }, { once: true });
+        };
+
+        // 优化花瓣创建
         function createPetal() {
             const petal = document.createElement('div');
             petal.className = 'petal';
             
-            // 心形大小 (30-50px)
             const size = Math.random() * 20 + 30;
             petal.style.width = `${size}px`;
             petal.style.height = `${size}px`;
             
-            // 随机起始位置（扩大范围使更分散）
             const startPositionX = Math.random() * 100;
             const startPositionY = Math.random() * 50 - 10;
             petal.style.right = `${startPositionX}%`;
             petal.style.top = `${startPositionY}%`;
             
-            // 随机飘落时长 (7-12秒)
             const duration = Math.random() * 5 + 7;
             petal.style.animationDuration = `${duration}s`;
             
             document.body.appendChild(petal);
             
-            petal.addEventListener('animationend', function() {
+            petal.addEventListener('animationend', () => {
                 if (petal && petal.parentNode) {
                     petal.parentNode.removeChild(petal);
                 }
             });
         }
-        /*
-         * 配置项
-         */
+
+        // 优化花瓣初始化
+        function initializePetals() {
+            const createPetalsInBatch = () => {
+                const batchSize = 5;
+                for (let i = 0; i < batchSize; i++) {
+                    requestAnimationFrame(() => createPetal());
+                }
+            };
+
+            createPetalsInBatch();
+            setInterval(createPetalsInBatch, 2000);
+        }
+
+        // 优化文字显示动画
+        async function showTextOneByOne(element) {
+            if (!element) return;
+            
+            const text = element.innerText;
+            element.innerText = "";
+            element.style.display = "block";
+            
+            for (let i = 0; i < text.length; i++) {
+                await new Promise(resolve => {
+                    requestAnimationFrame(() => {
+                        element.innerText = text.substring(0, i + 1);
+                        setTimeout(resolve, 180); // 控制每个字的显示速度
+                    });
+                });
+            }
+        }
+
+        // 优化后的动画显示函数
+        async function animateDisplay() {
+            try {
+                // 等待资源加载完成
+                await preloadResources();
+                
+                // 隐藏加载界面
+                const loading = document.getElementById('loading');
+                loading.style.opacity = '0';
+                loading.style.transition = 'opacity 0.5s';
+                setTimeout(() => loading.style.display = 'none', 500);
+
+                // 开始背景动画
+                requestAnimationFrame(animate);
+
+                // 初始化音频
+                initializeAudio();
+
+                // 初始化花瓣（移到这里）
+                initializePetals();
+
+                // 按顺序显示文字
+                // 1. 首先同时显示 left1 和 right1
+                await Promise.all([
+                    showTextOneByOne(document.getElementById('left1')),
+                    showTextOneByOne(document.getElementById('right1'))
+                ]);
+                await new Promise(resolve => setTimeout(resolve, 1000)); // 等待1秒
+
+                // 2. 然后同时显示 left3 和 right3
+                await Promise.all([
+                    showTextOneByOne(document.getElementById('left3')),
+                    showTextOneByOne(document.getElementById('right3'))
+                ]);
+                await new Promise(resolve => setTimeout(resolve, 1000)); // 等待1秒
+
+                // 3. 显示名字
+                await showTextOneByOne(document.getElementById('name'));
+                await new Promise(resolve => setTimeout(resolve, 1000)); // 等待1秒
+
+                // 4. 显示心形文字
+                while (true) {
+                    await showTextOneByOne(document.getElementById('heart-text'));
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                }
+
+            } catch (e) {
+                console.error('Error in animateDisplay:', e);
+                // 出错时也要隐藏加载界面
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        // 粒子系统配置
         var settings = {
             particles: {
-                length: 500, // 最大粒子数量
-                duration: 2, // 粒子持续时间（秒）
-                velocity: 100, // 粒子速度（像素/秒）
-                effect: -0.75, // 粒子效果系数，控制粒子的运动
-                size: 30, // 粒子的大小（像素）
+                length: 500,
+                duration: 2,
+                velocity: 100,
+                effect: -0.75,
+                size: 30,
             },
         };
 
-        /*
-         * RequestAnimationFrame 兼容性处理
-         */
-        (function () { 
-            var b = 0; 
-            var c = ["ms", "moz", "webkit", "o"]; 
-            for (var a = 0; a < c.length && !window.requestAnimationFrame; ++a) { 
-                window.requestAnimationFrame = window[c[a] + "RequestAnimationFrame"]; 
-                window.cancelAnimationFrame = window[c[a] + "CancelAnimationFrame"] || window[c[a] + "CancelRequestAnimationFrame"] 
-            } 
-            if (!window.requestAnimationFrame) { 
-                window.requestAnimationFrame = function (h, e) { 
-                    var d = new Date().getTime(); 
-                    var f = Math.max(0, 16 - (d - b)); 
-                    var g = window.setTimeout(function () { h(d + f) }, f); 
-                    b = d + f; 
-                    return g 
-                } 
-            } 
-            if (!window.cancelAnimationFrame) { 
-                window.cancelAnimationFrame = function (d) { clearTimeout(d) } 
-            } 
-        })();
-
-        /*
-         * 定义 Point 类，用于表示粒子的位置和方向
-         */
-        var Point = (function () {
+        // Point 类定义
+        var Point = (function() {
             function Point(x, y) {
                 this.x = (typeof x !== 'undefined') ? x : 0;
                 this.y = (typeof y !== 'undefined') ? y : 0;
             }
-            Point.prototype.clone = function () {
+            Point.prototype.clone = function() {
                 return new Point(this.x, this.y);
             };
-            Point.prototype.length = function (length) {
+            Point.prototype.length = function(length) {
                 if (typeof length == 'undefined')
                     return Math.sqrt(this.x * this.x + this.y * this.y);
                 this.normalize();
@@ -334,7 +414,7 @@
                 this.y *= length;
                 return this;
             };
-            Point.prototype.normalize = function () {
+            Point.prototype.normalize = function() {
                 var length = this.length();
                 this.x /= length;
                 this.y /= length;
@@ -343,17 +423,15 @@
             return Point;
         })();
 
-        /*
-         * 定义粒子类
-         */
-        var Particle = (function () {
+        // 粒子类定义
+        var Particle = (function() {
             function Particle() {
                 this.position = new Point();
                 this.velocity = new Point();
                 this.acceleration = new Point();
                 this.age = 0;
             }
-            Particle.prototype.initialize = function (x, y, dx, dy) {
+            Particle.prototype.initialize = function(x, y, dx, dy) {
                 this.position.x = x;
                 this.position.y = y;
                 this.velocity.x = dx;
@@ -362,14 +440,14 @@
                 this.acceleration.y = dy * settings.particles.effect;
                 this.age = 0;
             };
-            Particle.prototype.update = function (deltaTime) {
+            Particle.prototype.update = function(deltaTime) {
                 this.position.x += this.velocity.x * deltaTime;
                 this.position.y += this.velocity.y * deltaTime;
                 this.velocity.x += this.acceleration.x * deltaTime;
                 this.velocity.y += this.acceleration.y * deltaTime;
                 this.age += deltaTime;
             };
-            Particle.prototype.draw = function (context, image) {
+            Particle.prototype.draw = function(context, image) {
                 function ease(t) {
                     return (--t) * t * t + 1;
                 }
@@ -380,10 +458,8 @@
             return Particle;
         })();
 
-        /*
-         * 粒子池，用于管理粒子的创建与重用
-         */
-        var ParticlePool = (function () {
+        // 粒子池
+        var ParticlePool = (function() {
             var particles,
                 firstActive = 0,
                 firstFree = 0,
@@ -394,14 +470,16 @@
                 for (var i = 0; i < particles.length; i++)
                     particles[i] = new Particle();
             }
-            ParticlePool.prototype.add = function (x, y, dx, dy) {
+
+            ParticlePool.prototype.add = function(x, y, dx, dy) {
                 particles[firstFree].initialize(x, y, dx, dy);
                 firstFree++;
                 if (firstFree == particles.length) firstFree = 0;
                 if (firstActive == firstFree) firstActive++;
                 if (firstActive == particles.length) firstActive = 0;
             };
-            ParticlePool.prototype.update = function (deltaTime) {
+
+            ParticlePool.prototype.update = function(deltaTime) {
                 var i;
                 if (firstActive < firstFree) {
                     for (i = firstActive; i < firstFree; i++)
@@ -418,7 +496,8 @@
                     if (firstActive == particles.length) firstActive = 0;
                 }
             };
-            ParticlePool.prototype.draw = function (context, image) {
+
+            ParticlePool.prototype.draw = function(context, image) {
                 if (firstActive < firstFree) {
                     for (i = firstActive; i < firstFree; i++)
                         particles[i].draw(context, image);
@@ -433,13 +512,11 @@
             return ParticlePool;
         })();
 
-        /*
-         * 渲染粒子动画
-         */
-        (function (canvas) {
+        // 心形粒子动画
+        (function(canvas) {
             var context = canvas.getContext('2d'),
                 particles = new ParticlePool(settings.particles.length),
-                particleRate = settings.particles.length / settings.particles.duration, 
+                particleRate = settings.particles.length / settings.particles.duration,
                 time;
 
             function pointOnHeart(t) {
@@ -449,7 +526,7 @@
                 );
             }
 
-            var image = (function () {
+            var image = (function() {
                 var canvas = document.createElement('canvas'),
                     context = canvas.getContext('2d');
                 canvas.width = settings.particles.size;
@@ -465,7 +542,7 @@
                 var point = to(t);
                 context.moveTo(point.x, point.y);
                 while (t < Math.PI) {
-                    t += 0.01; 
+                    t += 0.01;
                     point = to(t);
                     context.lineTo(point.x, point.y);
                 }
@@ -498,125 +575,28 @@
                 canvas.height = canvas.clientHeight;
             }
             window.onresize = onResize;
-            setTimeout(function () {
+
+            setTimeout(function() {
                 onResize();
                 render();
             }, 10);
         })(document.getElementById('pinkboard'));
 
-        // Function to display each character one by one
-        async function showTextOneByOne(element) {
-            const text = element.innerText;
-            element.innerText = ""; // Clear text initially
-            element.style.display = "block"; // Make it visible
-            
-            for (let i = 0; i < text.length; i++) {
-                element.innerText += text[i];
-                await new Promise(resolve => setTimeout(resolve, 180)); // Show one character every 200ms
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(() => {
+                    animateDisplay();
+                });
+            } else {
+                setTimeout(animateDisplay, 0);
             }
-        }
-
-        async function animateDisplay() {
-            try {
-                // 确保所有资源加载完成
-                await Promise.all([
-                    new Promise(resolve => {
-                        if (document.readyState === 'complete') {
-                            resolve();
-                        } else {
-                            window.addEventListener('load', resolve);
-                        }
-                    }),
-                    new Promise(resolve => {
-                        const audio = document.getElementById('backgroundMusic');
-                        if (audio.readyState >= 2) {
-                            resolve();
-                        } else {
-                            audio.addEventListener('canplay', resolve);
-                        }
-                    })
-                ]);
-
-                // 隐藏加载指示器
-                document.getElementById('loading').style.display = 'none';
-
-                // Step 1: Show the first lines on both sides simultaneously
-                await Promise.all([
-                    showTextOneByOne(document.getElementById("left1")),
-                    showTextOneByOne(document.getElementById("right1"))
-                ]);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // Step 2: Show the second lines on both sides simultaneously
-                //await Promise.all([
-                //    showTextOneByOne(document.getElementById("left2")),
-                //    showTextOneByOne(document.getElementById("right2"))
-                //]);
-                //await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // Step 3: Show the third lines on both sides simultaneously
-                await Promise.all([
-                    showTextOneByOne(document.getElementById("left3")),
-                    showTextOneByOne(document.getElementById("right3"))
-                ]);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                await Promise.all([
-                    showTextOneByOne(document.getElementById("name"))
-                ]);
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                // 创建初始花瓣
-                for(let i = 0; i < 10; i++) {
-                    setTimeout(() => {
-                        try {
-                            createPetal();
-                        } catch (e) {
-                            console.error('Error creating initial petal:', e);
-                        }
-                    }, Math.random() * 3000);
-                }
-                
-                // 随机间隔创建新花瓣
-                function scheduleNextPetal() {
-                    const delay = Math.random() * 300 + 300; // 300-600ms随机间隔
-                    setTimeout(() => {
-                        try {
-                            createPetal();
-                            scheduleNextPetal();
-                        } catch (e) {
-                            console.error('Error in scheduleNextPetal:', e);
-                            setTimeout(scheduleNextPetal, 1000);
-                        }
-                    }, delay);
-                }
-                
-                scheduleNextPetal();
-
-                while (true) {
-                    await showTextOneByOne(document.getElementById("heart-text"));
-                    await new Promise(resolve => setTimeout(resolve, 2000)); // Show one character every 1000ms
-                }
-                // Step 4: Display the heart text after all side texts
-               // document.getElementById("heart-text").style.display = "block";
-           } catch (e) {
-               console.error('Error in animateDisplay:', e);
-           }
-        }
-        // 添加音频加载优化
-        document.addEventListener('DOMContentLoaded', function() {
-            var audio = document.getElementById('backgroundMusic');
-            audio.load();
         });
 
-        // 替换原有的执行时机代码
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                requestAnimationFrame(animateDisplay);
-            });
-        } else {
-            requestAnimationFrame(animateDisplay);
-        }
+        // 添加错误处理
+        window.addEventListener('error', function(e) {
+            console.error('Resource loading error:', e.target.src || e.target.href);
+        });
     </script>
-</BODY>
-</HTML>
+</body>
+</html>
