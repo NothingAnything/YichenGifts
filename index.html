@@ -9,7 +9,7 @@
 <body>
 <canvas id="canvas"></canvas>
     <!-- Audio Background Music -->
-    <audio  autoplay="autoplay" loop="loop" preload="auto">
+    <audio id="backgroundMusic" loop>
         <source src="renxi.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -21,6 +21,26 @@
         }
     </style>
     <script type="text/javascript">
+
+        // 获取 audio 元素
+        var audio = document.getElementById('backgroundMusic');
+
+        // 检查浏览器是否支持 audio 元素
+        if (audio != undefined) {
+            // 尝试播放音乐
+            audio.play().catch(function(error) {
+                // 如果自动播放失败，等待用户交互
+                console.log("自动播放被阻止，等待用户交互");
+            });
+
+            // 监听用户的首次交互事件
+            document.addEventListener('click', function() {
+                // 用户交互后播放音乐
+                audio.play().catch(function(error) {
+                    console.log("播放音乐时出错: ", error);
+                });
+            }, { once: true }); // { once: true } 表示事件只触发一次
+        }
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
 
