@@ -54,18 +54,20 @@
             display: inline-block;
             top: 50%;
             left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
         }
 
-        /* 修改字体大小响应式设置 */
         .heart {
             font-family: 'Brush Script MT', cursive;
             position: fixed;
             top: 73%;
-            left: 47.5%;
+            left: 50%;
+            transform: translateX(-50%);
             margin-top: -75px;
-            margin-left: -150px;
             color: #c20cd3;
-            font-size: clamp(35px, 5vw, 65px); /* 根据视窗宽度自适应字体大小 */
+            font-size: clamp(24px, 4vw, 65px);
             animation: fadeIn 2s;
             font-weight: bold;
             white-space: nowrap;
@@ -79,7 +81,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #c20cd3;
-            font-size: clamp(40px, 6vw, 70px); /* 根据视窗宽度自适应字体大小 */
+            font-size: clamp(28px, 5vw, 70px);
             font-weight: bold;
             white-space: nowrap;
             display: none;
@@ -95,13 +97,13 @@
             position: fixed;
             display: none;
             animation: flash 2s infinite;
+            line-height: 1.5;
         }
 
         .vertical-text {
             writing-mode: vertical-rl;
             text-orientation: upright;
         }
-
         /* PC端默认位置 - 更靠近中间 */
         .left-text-1 { 
             left: calc(15% + 1vw); 
@@ -137,12 +139,13 @@
 
         @media screen and (max-width: 768px) {
             .side-text {
-                font-size: clamp(20px, 3.5vw, 35px);
+                font-size: clamp(16px, 3.5vw, 24px);
+                line-height: 1.3;
             }
-            .left-text-1 { left: calc(4% + 1vw); }
-            .left-text-3 { left: calc(8% + 1vw); }
-            .right-text-1 { right: calc(4% + 1vw); }
-            .right-text-3 { right: calc(8% + 1vw); }
+            .left-text-1 { left: 5%; top: 15%; }
+            .left-text-3 { left: 12%; top: 35%; }
+            .right-text-1 { right: 5%; top: 15%; }
+            .right-text-3 { right: 12%; top: 35%; }
         }
 
         /* 超小屏幕设备 */
@@ -216,18 +219,6 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        /* 添加媒体查询，针对移动设备调整布局 */
-        @media screen and (max-width: 768px) {
-            .side-text {
-                font-size: clamp(20px, 3.5vw, 35px); /* 移动端更小的字体 */
-            }
-
-            .left-text-1 { left: 1%; }
-            .left-text-3 { left: 5%; }
-            .right-text-1 { right: 1%; }
-            .right-text-3 { right: 5%; }
-        }
     </style>
 </head>
 
@@ -290,7 +281,7 @@
                 var text = texts[Math.floor(Math.random() * texts.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-                if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+                if (drops[i] * fontSize > canvas.height || Math.random() > 0.98) {
                     drops[i] = 0;
                 }
 
@@ -312,7 +303,6 @@
             }
             requestAnimationFrame(animate);
         }
-
         // 资源预加载
         const preloadResources = () => {
             const audio = document.getElementById('backgroundMusic');
@@ -422,7 +412,7 @@
                 // 初始化音频
                 initializeAudio();
 
-                // 初始化花瓣（移到这里）
+                // 初始化花瓣
                 initializePetals();
 
                 // 按顺序显示文字
@@ -456,7 +446,6 @@
                 document.getElementById('loading').style.display = 'none';
             }
         }
-
         // 粒子系统配置
         var settings = {
             particles: {
@@ -590,9 +579,12 @@
                 particleRate = settings.particles.length / settings.particles.duration,
                 time;
 
+            // 根据屏幕大小调整心形大小
+            const scale = window.innerWidth <= 768 ? 0.6 : 1;
+
             function pointOnHeart(t) {
                 return new Point(
-                    160 * Math.pow(Math.sin(t), 3),
+                    160 * Math.pow(Math.sin(t), 3) * scale,
                     130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
                 );
             }
@@ -655,6 +647,7 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 使用 requestIdleCallback 在浏览器空闲时初始化
             if ('requestIdleCallback' in window) {
                 requestIdleCallback(() => {
                     animateDisplay();
@@ -668,13 +661,6 @@
         window.addEventListener('error', function(e) {
             console.error('Resource loading error:', e.target.src || e.target.href);
         });
-
-        // 在 window.onresize 中添加粒子大小调整
-        function onResize() {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-            settings.particles.size = Math.min(30, window.innerWidth / 30);
-        }
     </script>
 </body>
 </html>
