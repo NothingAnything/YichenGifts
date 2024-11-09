@@ -361,15 +361,15 @@
             const size = Math.random() * 20 + 30;
             petal.style.width = `${size}px`;
             petal.style.height = `${size}px`;
-            
+
             const startPositionX = Math.random() * 100;
             const startPositionY = Math.random() * 50 - 10;
             petal.style.right = `${startPositionX}%`;
             petal.style.top = `${startPositionY}%`;
-            
+
             const duration = Math.random() * 5 + 7;
             petal.style.animationDuration = `${duration}s`;
-            
+
             document.body.appendChild(petal);
             
             petal.addEventListener('animationend', () => {
@@ -465,11 +465,11 @@
         // 修改粒子系统配置
         var settings = {
             particles: {
-                length: window.innerWidth <= 768 ? 300 : 500, // 移动端减少粒子数量
+                length: window.innerWidth <= 768 ? 300 : 500,
                 duration: 2,
                 velocity: 100,
                 effect: -0.75,
-                size: window.innerWidth <= 768 ? 15 : 30, // 移动端显著减小粒子大小
+                size: window.innerWidth <= 768 ? 12 : 30, // 进一步减小移动端粒子大小
             },
         };
 
@@ -595,38 +595,37 @@
                 particleRate = settings.particles.length / settings.particles.duration,
                 time;
 
-            // 在心形粒子动画中修改缩放比例
+            // 根据屏幕大小计算缩放比例
+            function getScale() {
+                const width = window.innerWidth;
+                if (width <= 480) return 0.25; // 超小屏幕
+                if (width <= 768) return 0.35; // 手机屏幕
+                if (width <= 1024) return 0.6; // 平板屏幕
+                return 1; // 桌面屏幕
+            }
+
             function pointOnHeart(t) {
-                // 根据屏幕宽度动态计算缩放比例
-                const scale = window.innerWidth <= 768 ? 0.4 : 
-                             window.innerWidth <= 1024 ? 0.6 : 1;
-            
+                const scale = getScale();
                 return new Point(
                     160 * Math.pow(Math.sin(t), 3) * scale,
                     (130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25) * scale
                 );
             }
 
-            // 添加窗口大小改变时的处理
-            window.addEventListener('resize', function() {
-                // 更新粒子大小
-                settings.particles.size = window.innerWidth <= 768 ? 15 : 30;
-                settings.particles.length = window.innerWidth <= 768 ? 300 : 500;
-            
-                // 重新调整画布大小
-                onResize();
-            });
             var image = (function() {
                 var canvas = document.createElement('canvas'),
                     context = canvas.getContext('2d');
                 canvas.width = settings.particles.size;
                 canvas.height = settings.particles.size;
+
+                // 调整心形绘制的缩放比例
                 function to(t) {
                     var point = pointOnHeart(t);
-                    point.x = settings.particles.size / 2 + point.x * settings.particles.size / 350;
-                    point.y = settings.particles.size / 2 - point.y * settings.particles.size / 350;
+                    point.x = settings.particles.size / 2 + point.x * settings.particles.size / (350 * (window.innerWidth <= 768 ? 1.2 : 1));
+                    point.y = settings.particles.size / 2 - point.y * settings.particles.size / (350 * (window.innerWidth <= 768 ? 1.2 : 1));
                     return point;
                 }
+
                 context.beginPath();
                 var t = -Math.PI;
                 var point = to(t);
@@ -649,25 +648,33 @@
                 var newTime = new Date().getTime() / 1000,
                     deltaTime = newTime - (time || newTime);
                 time = newTime;
+
                 context.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 调整粒子生成的位置
                 var amount = particleRate * deltaTime;
                 for (var i = 0; i < amount; i++) {
                     var pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-                    var dir = pos.clone().length(settings.particles.velocity);
+                    var dir = pos.clone().length(settings.particles.velocity * (window.innerWidth <= 768 ? 0.7 : 1));
                     particles.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
                 }
+
                 particles.update(deltaTime);
                 particles.draw(context, image);
             }
 
+            // 优化 resize 处理
             function onResize() {
                 canvas.width = canvas.clientWidth;
                 canvas.height = canvas.clientHeight;
+                settings.particles.size = window.innerWidth <= 768 ? 12 : 30;
+                settings.particles.length = window.innerWidth <= 768 ? 300 : 500;
             }
-            window.onresize = onResize;
+
+            window.addEventListener('resize', onResize);
+            onResize(); // 初始化时调用一次
 
             setTimeout(function() {
-                onResize();
                 render();
             }, 10);
         })(document.getElementById('pinkboard'));
