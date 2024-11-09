@@ -4,10 +4,17 @@
 
 <head>
     <title>Yichen's Gift</title>
+    <!-- 预加载音频文件 -->
+    <link rel="preload" href="River_flow_in_you.mp3" as="audio">
+    <!-- 预加载字体 -->
+    <link rel="preload" href="path/to/Brush-Script-MT.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 
 <body>
-<canvas id="canvas"></canvas>
+    <div id="loading" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #c20cd3; font-size: 24px; z-index: 9999;">
+        加载中...
+    </div>
+    <canvas id="canvas"></canvas>
     <!-- Audio Background Music -->
     <audio id="backgroundMusic" loop>
         <!-- <source src="renxi.mp3" type="audio/mpeg">-->
@@ -511,6 +518,28 @@
 
         async function animateDisplay() {
             try {
+                // 确保所有资源加载完成
+                await Promise.all([
+                    new Promise(resolve => {
+                        if (document.readyState === 'complete') {
+                            resolve();
+                        } else {
+                            window.addEventListener('load', resolve);
+                        }
+                    }),
+                    new Promise(resolve => {
+                        const audio = document.getElementById('backgroundMusic');
+                        if (audio.readyState >= 2) {
+                            resolve();
+                        } else {
+                            audio.addEventListener('canplay', resolve);
+                        }
+                    })
+                ]);
+
+                // 隐藏加载指示器
+                document.getElementById('loading').style.display = 'none';
+
                 // Step 1: Show the first lines on both sides simultaneously
                 await Promise.all([
                     showTextOneByOne(document.getElementById("left1")),
@@ -574,11 +603,19 @@
                console.error('Error in animateDisplay:', e);
            }
         }
-        // 确保 DOM 加载完成后再执行
+        // 添加音频加载优化
+        document.addEventListener('DOMContentLoaded', function() {
+            var audio = document.getElementById('backgroundMusic');
+            audio.load();
+        });
+
+        // 替换原有的执行时机代码
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', animateDisplay);
+            document.addEventListener('DOMContentLoaded', () => {
+                requestAnimationFrame(animateDisplay);
+            });
         } else {
-            animateDisplay();
+            requestAnimationFrame(animateDisplay);
         }
     </script>
 </BODY>
