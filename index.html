@@ -142,6 +142,7 @@
             font-size: 70px;
             font-weight: bold;
             white-space: nowrap; /* 防止文本换行 */
+            display: none; /* Hide initially */
             animation: flash 2s infinite;
         }
         /* Text Style for the Side Sentences */
@@ -176,7 +177,7 @@
             z-index: 1000;
             animation: falling linear forwards;
         }
-        
+
         .petal::before,
         .petal::after {
             content: '';
@@ -187,7 +188,7 @@
             background: #f763ef;
             border-radius: 50% 50% 0 0;
         }
-        
+
         .petal::before {
             left: 50%;
             transform: rotate(-45deg);
@@ -199,7 +200,7 @@
             transform: rotate(45deg);
             transform-origin: 100% 100%;
         }
-	    
+
         @keyframes falling {
             0% {
                 transform: translate(0, -10%) rotate(0deg);
@@ -234,7 +235,7 @@
         <div class="side-text vertical-text left-text-3" id="left3">愿得一人心，白首不相离</div>
 
         <!-- Heart Shape Text -->
-        <div class="heart" id="heart-text">永不凋零的爱</div>
+        <div class="heart" id="heart-text">至死不渝的爱</div>
         <div class="name" id="name">亦辰</div>
 
         <!-- Right Side Vertical Texts -->
@@ -262,14 +263,8 @@
             const duration = Math.random() * 5 + 7;
             petal.style.animationDuration = `${duration}s`;
             
-            // 随机初始旋转角度
-            const initialRotation = Math.random() * 360;
-            petal.style.transform = `rotate(${initialRotation}deg)`;
-            
-            // 确保添加到正确的容器
             document.body.appendChild(petal);
             
-            // 动画结束后移除元素
             petal.addEventListener('animationend', function() {
                 if (petal && petal.parentNode) {
                     petal.parentNode.removeChild(petal);
@@ -537,7 +532,12 @@
                 ]);
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
-                // 创建初始花瓣，随机延迟
+                await Promise.all([
+                    showTextOneByOne(document.getElementById("name"))
+                ]);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // 创建初始花瓣
                 for(let i = 0; i < 10; i++) {
                     setTimeout(() => {
                         try {
@@ -557,18 +557,12 @@
                             scheduleNextPetal();
                         } catch (e) {
                             console.error('Error in scheduleNextPetal:', e);
-                            // 如果出错，尝试重新调度
                             setTimeout(scheduleNextPetal, 1000);
                         }
                     }, delay);
                 }
                 
-                // 确保 DOM 完全加载后再开始
-                if (document.readyState === 'complete') {
-                    scheduleNextPetal();
-                } else {
-                    window.addEventListener('load', scheduleNextPetal);
-                }
+                scheduleNextPetal();
 
                 while (true) {
                     await showTextOneByOne(document.getElementById("heart-text"));
